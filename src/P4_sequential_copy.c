@@ -22,7 +22,7 @@ typedef struct {
 
 void* worker(void* arg) {
     ThreadInfo *th = (ThreadInfo*) arg;
-    usigned char buffer[BUFF_SIZE];
+    unsigned char buffer[BUFF_SIZE];
     unsigned local_histogram[256] = {0};
 
     int fd = open(th->path, O_RDONLY);
@@ -31,7 +31,11 @@ void* worker(void* arg) {
         perror("open");
         return NULL;
     }
-    lseek(fd, th->offset, SEEK_SET);
+    if(lseek(fd, th->offset, SEEK_SET) < 0) {
+        perror("lseek");
+        close(fd);
+        return NULL;
+    }
     
     int bytes_left = th->bytesToRead;
     int to_read;
@@ -49,14 +53,19 @@ void* worker(void* arg) {
             break;
         }
 
-        pthread_mutex_lock(&lock);
         for (int i = 0; i < n; i++) {
-            histogram[i] += local[i];
+            local_histogram[buffer[i]]++;
         }
         bytes_left -= n;
-        pthread_mutex_unlock(&lock);
     }
     close(fd);
+
+    pthread_mutex_lock(&lock);
+    for (int i = 0; i < 256; i++) {
+        histogram[i] += local_histogram[i];
+    }
+    pthread_mutex_unlock(&lock);
+
     return NULL;
 }
 
@@ -68,13 +77,13 @@ int main(int argc, char* argv[]) {
 
     int thread_numbers = atoi(argv[argc - 1]);
 
-    pthread_mutex_init(&lock, NULL);
-
     if (thread_numbers < 1) {
         printf("The numbers of threads should be at least 1\n");
         _exit(1);
     }
 
+    pthread_mutex_init(&lock, NULL);
+    
     // Read the header
     int width, height;
     int maxval;
