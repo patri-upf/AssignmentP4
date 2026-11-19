@@ -1,0 +1,1 @@
+gcc -O2 -pthread src/Hangout/P4_sequential.c src/Hangout/parsePGM.c -o computeHistogram
