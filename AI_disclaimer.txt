@@ -1,0 +1,6 @@
+We have used Claude_AI
+
+It has been used as a tool to understand why Python3 was not working. We tried to print the messages as before, with a
+STDOUT_FILENO, and it was not working, so we have used it to understand why it was happening and how to solve it. Finally,
+the returns were wrong (the first attempt was to do as always done: return NULL). AI was used to understand that here was different
+and require a return (void *)1.
