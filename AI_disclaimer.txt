@@ -1,6 +1,8 @@
 We have used Claude_AI
 
-It has been used as a tool to understand why Python3 was not working. We tried to print the messages as before, with a
-STDOUT_FILENO, and it was not working, so we have used it to understand why it was happening and how to solve it. Finally,
-the returns were wrong (the first attempt was to do as always done: return NULL). AI was used to understand that here was different
-and require a return (void *)1.
+First, after an implementation of a code that we were not sure it was correct, we asked for the meaning to it: that is, 
+we asked what our implemented code was doing, and then comparing with our intentions. Also, since we tried to print the messages
+as we have done in this course before, there were errors. We used it to know why there were errors and how can we solved them.
+It has been used as a tool to understand why Python3 was not working as well. 
+Finally, the returns were wrong (the first attempt was to do as always done: return NULL).
+AI was used to understand that here was different and require a return (void *)1.
